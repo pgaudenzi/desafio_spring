@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ProductDto {
 
+    private int id;
     private String name;
     private String category;
     private String brand;

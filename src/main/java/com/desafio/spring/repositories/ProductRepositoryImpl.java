@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class PorductRepositoryImpl implements ProductRepository {
+public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<ProductDto> getAll() {
@@ -21,13 +21,9 @@ public class PorductRepositoryImpl implements ProductRepository {
 
         try {
             fileReader = new FileReader("src/main/resources/dbProductos.csv");
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-        }
 
-        BufferedReader csvReader = new BufferedReader(fileReader);
+            BufferedReader csvReader = new BufferedReader(fileReader);
 
-        try {
             String row;
             boolean firstTime = true;
             while ((row = csvReader.readLine()) != null) {
@@ -39,6 +35,9 @@ public class PorductRepositoryImpl implements ProductRepository {
                 }
             }
             csvReader.close();
+
+        } catch (FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,17 +47,18 @@ public class PorductRepositoryImpl implements ProductRepository {
 
     private ProductDto objectMapper(String[] data) {
 
-        String name, category, brand, price, quantity, freeShipping, prestige;
+        String id, name, category, brand, price, quantity, freeShipping, prestige;
 
-        name = data[0];
-        category = data[1];
-        brand = data[2];
-        price = data[3];
-        quantity = data[4];
-        freeShipping = data[5];
-        prestige = data[6];
+        id = data[0];
+        name = data[1];
+        category = data[2];
+        brand = data[3];
+        price = data[4];
+        quantity = data[5];
+        freeShipping = data[6];
+        prestige = data[7];
 
-        return new ProductDto(name, category, brand,
+        return new ProductDto(Integer.parseInt(id), name, category.toLowerCase(), brand,
                 Integer.parseInt(price.replaceAll("[^0-9]","")),
                 Integer.parseInt(quantity),
                 freeShipping, prestige);
