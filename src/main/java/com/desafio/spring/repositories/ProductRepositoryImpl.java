@@ -7,11 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final List<ProductDto> products;
+    private final AtomicInteger id = new AtomicInteger();
 
     public ProductRepositoryImpl() {
         this.products = loadDataBase();
@@ -65,18 +67,17 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private ProductDto objectMapper(String[] data) {
 
-        String id, name, category, brand, price, quantity, freeShipping, prestige;
+        String name, category, brand, price, quantity, freeShipping, prestige;
 
-        id = data[0];
-        name = data[1];
-        category = data[2];
-        brand = data[3];
-        price = data[4];
-        quantity = data[5];
-        freeShipping = data[6];
-        prestige = data[7];
+        name = data[0];
+        category = data[1];
+        brand = data[2];
+        price = data[3];
+        quantity = data[4];
+        freeShipping = data[5];
+        prestige = data[6];
 
-        return new ProductDto(Integer.parseInt(id), name, category.toLowerCase(), brand,
+        return new ProductDto(id.incrementAndGet(), name, category.toLowerCase(), brand,
                 Integer.parseInt(price.replaceAll("[^0-9]","")),
                 Integer.parseInt(quantity),
                 freeShipping, prestige);
