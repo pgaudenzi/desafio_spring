@@ -17,24 +17,39 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     FilterService filterService;
 
+    @Autowired
+    SortService sortService;
+
     @Override
     public List<ProductDto> getProducts(Map<String, String> params) throws IllegalArgumentException {
+        List<ProductDto> result;
+        boolean sort = false;
+        int sortCriteria = 0;
 
-        if (params.isEmpty()) return repository.getAll();
+        if (params.isEmpty())
+            return repository.getAll();
 
-        if (params.containsKey("sort")) {
-            int sortCriteria = Integer.parseInt(params.get("sort"));
-            params.remove("sort");
+        if (params.containsKey("order")) {
+            sort = true;
+            sortCriteria = Integer.parseInt(params.get("order"));
+            params.remove("order");
         }
 
-        filterService.validate(params);
         List<ProductDto> products = repository.getAll();
+        filterService.validate(params);
 
         if (params.size() == 2) {
-            return filterService.filterProductsWithMultipleFilters(products, params);
+            result = filterService.filterProductsWithTwoFilters(products, params);
         } else {
-            return filterService.filterByCategory(params.get("category"), products);
+            result = filterService.filterByCategory(params.get("category"), products);
         }
+
+        if (sort) {
+            return sortService.sort(sortCriteria, result);
+        }
+
+        return result;
     }
+
 
 }

@@ -15,11 +15,11 @@ public class FilterServiceImpl implements FilterService {
         if (filters.size() > 2)
             throw new IllegalArgumentException("Invalid amount of arguments, only two filters allowed");
         if (filters.size() == 1 && !filters.containsKey("category"))
-            throw new IllegalArgumentException("You can filter by category only");
+            throw new IllegalArgumentException("Products can only be filtered by category");
     }
 
     @Override
-    public List<ProductDto> filterProductsWithMultipleFilters(List<ProductDto> products, Map<String, String> filters) {
+    public List<ProductDto> filterProductsWithTwoFilters(List<ProductDto> products, Map<String, String> filters) {
         Object[] keys = filters.keySet().toArray();
         return products.stream()
                 .filter(product -> getAttribute(keys[0].toString(), product).equals(filters.get(keys[0].toString()))

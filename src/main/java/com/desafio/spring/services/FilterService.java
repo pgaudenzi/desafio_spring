@@ -9,7 +9,7 @@ public interface FilterService {
 
     void validate(Map<String, String> filters) throws IllegalArgumentException;
 
-    List<ProductDto> filterProductsWithMultipleFilters(List<ProductDto> products, Map<String, String> filters);
+    List<ProductDto> filterProductsWithTwoFilters(List<ProductDto> products, Map<String, String> filters);
 
     List<ProductDto> filterByCategory(String category, List<ProductDto> products);
 
