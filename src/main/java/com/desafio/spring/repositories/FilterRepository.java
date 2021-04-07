@@ -1,11 +1,11 @@
-package com.desafio.spring.services;
+package com.desafio.spring.repositories;
 
 import com.desafio.spring.dtos.ProductDto;
 
 import java.util.List;
 import java.util.Map;
 
-public interface FilterService {
+public interface FilterRepository {
 
     void validate(Map<String, String> filters) throws IllegalArgumentException;
 

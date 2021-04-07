@@ -1,6 +1,7 @@
 package com.desafio.spring.repositories;
 
 import com.desafio.spring.dtos.ProductDto;
+import com.desafio.spring.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -10,9 +11,26 @@ import java.util.List;
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
+    private final List<ProductDto> products;
+
+    public ProductRepositoryImpl() {
+        this.products = loadDataBase();
+    }
+
     @Override
     public List<ProductDto> getAll() {
-        return loadDataBase();
+        return this.products;
+    }
+
+    @Override
+    public ProductDto findProductById(int id) throws ProductNotFoundException {
+        List<ProductDto> products = this.products;
+        ProductDto result = null;
+        for (ProductDto product : products) {
+            if (product.getId() == id) result = product;
+        }
+        if (result == null) throw new ProductNotFoundException(id);
+        return result;
     }
 
     private List<ProductDto> loadDataBase() {

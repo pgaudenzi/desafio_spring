@@ -1,4 +1,4 @@
-package com.desafio.spring.services;
+package com.desafio.spring.repositories;
 
 import com.desafio.spring.dtos.ProductDto;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class SortServiceImpl implements SortService {
+public class SortRepositoryImpl implements SortRepository {
 
     public List<ProductDto> sort(int criteria, List<ProductDto> products) {
         List<ProductDto> sortedProducts = new ArrayList<>();

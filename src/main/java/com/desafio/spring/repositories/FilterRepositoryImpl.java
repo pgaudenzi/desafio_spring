@@ -1,4 +1,4 @@
-package com.desafio.spring.services;
+package com.desafio.spring.repositories;
 
 import com.desafio.spring.dtos.ProductDto;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class FilterServiceImpl implements FilterService {
+public class FilterRepositoryImpl implements FilterRepository {
 
     @Override
     public void validate(Map<String, String> filters) throws IllegalArgumentException {
