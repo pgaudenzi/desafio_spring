@@ -77,7 +77,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         freeShipping = data[5];
         prestige = data[6];
 
-        return new ProductDto(id.incrementAndGet(), name, category.toLowerCase(), brand,
+        return new ProductDto(id.incrementAndGet(), name, category, brand,
                 Integer.parseInt(price.replaceAll("[^0-9]","")),
                 Integer.parseInt(quantity),
                 freeShipping, prestige);

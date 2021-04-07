@@ -1,13 +1,13 @@
 package com.desafio.spring.repositories;
 
 import com.desafio.spring.dtos.ProductDto;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Service
+@Repository
 public class SortRepositoryImpl implements SortRepository {
 
     public List<ProductDto> sort(int criteria, List<ProductDto> products) {
