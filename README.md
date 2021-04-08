@@ -5,7 +5,8 @@
 Devuelve un listado con todos los productos disponibles 
  
 ### GET: /api/v1/articles?category=categoryName
-Devuelve un listado de los porductos filtrados por categoria
+* Devuelve un listado de los porductos filtrados por categoria
+* Si se usa solo un filtro, solo se puede filtrar por categoria.
 
 ### GET: /api/v1/articles?category=categoryName&freeShipping=true
 * Devuelve un listado de los porductos filtrados por la combinacion de dos filtros.

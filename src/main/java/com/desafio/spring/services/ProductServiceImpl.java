@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service's implementation to manage the logic to get the products.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -22,15 +25,22 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     SortRepository sortRepository;
 
+    /**
+     * Method to get the products.
+     * If no params are received from the user, it return all the available products.
+     * If only the 'order' param is received, first it get all the products and then return the a sorted list.
+     * If there are filters, first it filter the products, if it's needed it sort, and then return a filtered list.
+     * @param params
+     * @return the processed products according to the params received.
+     * @throws IllegalArgumentException
+     */
     @Override
     public List<ProductDto> getProducts(Map<String, String> params) throws IllegalArgumentException {
         List<ProductDto> result;
         boolean sort = false;
         int sortCriteria = 0;
 
-        if (params.isEmpty())
-            return repository.getAll();
-
+        // Remove the order value to manage the filters logic first
         if (params.containsKey("order")) {
             sort = true;
             sortCriteria = Integer.parseInt(params.get("order"));
@@ -38,6 +48,14 @@ public class ProductServiceImpl implements ProductService {
         }
 
         List<ProductDto> products = repository.getAll();
+
+        if (params.isEmpty()) {
+            if (sort) {
+                return sortRepository.sort(sortCriteria, products);
+            }
+            return products;
+        }
+
         filterRepository.validate(params);
 
         if (params.size() == 2) {

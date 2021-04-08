@@ -9,21 +9,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Implementation to get the products stored in csv file.
+ */
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
     private final List<ProductDto> products;
     private final AtomicInteger id = new AtomicInteger();
 
+    /**
+     * Constructor - needed to maintain the products in memory and manage the stock from there
+     */
     public ProductRepositoryImpl() {
         this.products = loadDataBase();
     }
 
+    /**
+     * @return all products
+     */
     @Override
     public List<ProductDto> getAll() {
         return this.products;
     }
 
+    /**
+     * @param id
+     * @return the product matching with the id passed by parameter
+     * @throws ProductNotFoundException
+     */
     @Override
     public ProductDto findProductById(int id) throws ProductNotFoundException {
         List<ProductDto> products = this.products;
@@ -38,6 +52,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         return result;
     }
 
+    /**
+     * Aux method to get the products from the csv
+     * @return
+     */
     private List<ProductDto> loadDataBase() {
         FileReader fileReader = null;
         String absPath = new File("").getAbsolutePath();
@@ -67,6 +85,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         return products;
     }
 
+    /**
+     * Aux method to convert a line from the csv to an object
+     * @param data
+     * @return
+     */
     private ProductDto objectMapper(String[] data) {
 
         String name, category, brand, price, quantity, freeShipping, prestige;

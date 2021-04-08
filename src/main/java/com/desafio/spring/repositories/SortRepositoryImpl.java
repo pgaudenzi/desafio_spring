@@ -7,9 +7,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Implementation to manage the product's ordering logic.
+ */
 @Repository
 public class SortRepositoryImpl implements SortRepository {
 
+    /**
+     * Sort products according to the criteria.
+     * 0 - By ascending name
+     * 1 - By descending name
+     * 2 - By ascending price
+     * 3 - By descending price
+     * @param criteria
+     * @param products
+     * @return
+     */
     public List<ProductDto> sort(int criteria, List<ProductDto> products) {
         List<ProductDto> sortedProducts = new ArrayList<>();
 

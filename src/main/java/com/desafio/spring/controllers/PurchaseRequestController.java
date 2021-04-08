@@ -18,12 +18,26 @@ public class PurchaseRequestController {
     @Autowired
     PurchaseRequestService service;
 
+    /**
+     * Endpoint to post a new purchase request
+     * @param request
+     * @return
+     * @throws ProductNotFoundException
+     * @throws NoAvailableStockException
+     */
     @PostMapping("/purchase-request")
     public ResponseEntity<PurchaseReqResponseDto> purchaseRequest(@RequestBody PurchaseRequestDto request)
             throws ProductNotFoundException, NoAvailableStockException {
         return new ResponseEntity<>(service.process(request), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to post purchase requests in a shopping cart
+     * @param request
+     * @return
+     * @throws ProductNotFoundException
+     * @throws NoAvailableStockException
+     */
     @PostMapping("/shopping-cart")
     public ResponseEntity<ShoppingCartDto> shoppingCartRequest(@RequestBody PurchaseRequestDto request)
             throws ProductNotFoundException, NoAvailableStockException {

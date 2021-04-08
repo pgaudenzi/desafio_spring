@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Service to manage a purchase request
+ */
 @Service
 public class PurchaseRequestServiceImpl implements PurchaseRequestService {
 
@@ -20,6 +23,13 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
     @Autowired
     ProductRepository repository;
 
+    /**
+     * Process a pruchase request
+     * @param request
+     * @return the response to the purchase request
+     * @throws ProductNotFoundException
+     * @throws NoAvailableStockException
+     */
     @Override
     public PurchaseReqResponseDto process(PurchaseRequestDto request)
             throws ProductNotFoundException, NoAvailableStockException {
@@ -31,6 +41,13 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
         return new PurchaseReqResponseDto(ticket, status);
     }
 
+    /**
+     * Process a shopping cart request
+     * @param request
+     * @return the shopping cart
+     * @throws ProductNotFoundException
+     * @throws NoAvailableStockException
+     */
     @Override
     public ShoppingCartDto processShoppingCart(PurchaseRequestDto request)
             throws ProductNotFoundException, NoAvailableStockException {
@@ -47,6 +64,12 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
         return shoppingCart;
     }
 
+    /**
+     * @param request
+     * @return the ticker with the articles
+     * @throws NoAvailableStockException
+     * @throws ProductNotFoundException
+     */
     private TicketDto calculateTicket(PurchaseRequestDto request)
             throws NoAvailableStockException, ProductNotFoundException {
 
@@ -74,6 +97,12 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
     }
 
 
+    /**
+     * Aux method to validate that the values of the products of the purchase request are correct
+     * @param products
+     * @param articles
+     * @throws NoAvailableStockException
+     */
     private void validateProducts(List<ProductDto> products, List<ItemTicketDto> articles) throws NoAvailableStockException {
         for (int i = 0; i < articles.size(); i++) {
             if (!products.get(i).getName().equals(articles.get(i).getName())

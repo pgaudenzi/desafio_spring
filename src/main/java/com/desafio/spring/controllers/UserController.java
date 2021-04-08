@@ -18,6 +18,13 @@ public class UserController {
     @Autowired
     UserService service;
 
+    /**
+     * Endpoint to add a new user
+     * @param user
+     * @return
+     * @throws IOException
+     * @throws ExistingUserException
+     */
     @PostMapping("/add-client")
     public ResponseEntity<String> createUser(@RequestBody UserDto user)
             throws IOException, ExistingUserException {
@@ -26,6 +33,11 @@ public class UserController {
         return new ResponseEntity<>("Nuevo cliente dado de alta", HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to list users
+     * @param province
+     * @return
+     */
     @GetMapping("/clients")
     public ResponseEntity<List<UserDto>> getClients(@RequestParam(required = false) String province) {
         return new ResponseEntity<>(service.getAllUsers(province), HttpStatus.OK);

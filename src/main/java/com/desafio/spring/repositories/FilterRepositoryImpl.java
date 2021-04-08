@@ -7,9 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation to manage filters validation and logic
+ */
 @Repository
 public class FilterRepositoryImpl implements FilterRepository {
 
+    /**
+     * Validates if filters comply with business rules.
+     * A max of two filters allowed.
+     * If only one filter is present, it must be only the category filter.
+     * @param filters
+     * @throws IllegalArgumentException
+     */
     @Override
     public void validate(Map<String, String> filters) throws IllegalArgumentException {
         if (filters.size() > 2)
@@ -18,6 +28,12 @@ public class FilterRepositoryImpl implements FilterRepository {
             throw new IllegalArgumentException("Products can only be filtered by category");
     }
 
+    /**
+     * Method to filter the products with two filters.
+     * @param products
+     * @param filters
+     * @return
+     */
     @Override
     public List<ProductDto> filterProductsWithTwoFilters(List<ProductDto> products, Map<String, String> filters) {
         Object[] keys = filters.keySet().toArray();
@@ -27,6 +43,12 @@ public class FilterRepositoryImpl implements FilterRepository {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Method to filter only by category
+     * @param category
+     * @param products
+     * @return
+     */
     @Override
     public List<ProductDto> filterByCategory(String category, List<ProductDto> products) {
         return products.stream()
@@ -34,6 +56,12 @@ public class FilterRepositoryImpl implements FilterRepository {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Aux method to get the value in the specified attribute
+     * @param attributeName
+     * @param product
+     * @return
+     */
     private String getAttribute(String attributeName, ProductDto product) {
 
         switch (attributeName) {

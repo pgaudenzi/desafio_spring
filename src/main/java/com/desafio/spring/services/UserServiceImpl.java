@@ -10,12 +10,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service to manage the logic to add and get users
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository repository;
 
+    /**
+     * Creates and persists a new user
+     * @param user
+     * @throws IOException
+     * @throws ExistingUserException
+     */
     @Override
     public void createUser(UserDto user) throws IOException, ExistingUserException {
         if (user.getDni() == null || user.getDni().equals("")
@@ -27,6 +36,12 @@ public class UserServiceImpl implements UserService {
         repository.addNewUser(user);
     }
 
+    /**
+     * Get all user from the database.
+     * If province param is present, then it filter by province and then return the filtered users
+     * @param province
+     * @return a list of users
+     */
     @Override
     public List<UserDto> getAllUsers(String province) {
         if (province != null) {

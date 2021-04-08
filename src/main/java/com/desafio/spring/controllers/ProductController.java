@@ -20,6 +20,11 @@ public class ProductController {
     @Autowired
     ProductService service;
 
+    /**
+     * @param params
+     * @return List of products, filtered and sorted if it needed.
+     * @throws IllegalArgumentException
+     */
     @GetMapping("/articles")
     public ResponseEntity<List<ProductDto>> getArticles( @RequestParam(required = false) Map<String, String> params)
             throws IllegalArgumentException {

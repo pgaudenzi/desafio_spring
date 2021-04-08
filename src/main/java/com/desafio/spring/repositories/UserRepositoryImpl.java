@@ -14,17 +14,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation to store and get the users.
+ */
 @Service
 public class UserRepositoryImpl implements UserRepository {
 
     private final String usersDbPath = "/src/main/resources/dbUsers.csv";
     private final String absPath = new File("").getAbsolutePath();
 
+    /**
+     * Write a new user in the csv file
+     * @param user
+     * @throws IOException
+     * @throws ExistingUserException
+     */
     @Override
     public void addNewUser(UserDto user) throws IOException, ExistingUserException {
         if (!exists(user.getDni())) {
             String[] userData = parseUserData(user);
-            //FileWriter file = new FileWriter("src/main/resources/dbUsers.csv", true);
             FileWriter file = new FileWriter(absPath + usersDbPath, true);
             CSVWriter writer = new CSVWriter(file);
             writer.writeNext(userData);
@@ -35,6 +43,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    /**
+     * Find a user by dni
+     * @param dni
+     * @return the user found
+     * @throws UserNotFoundException
+     */
     @Override
     public UserDto findUserByDni(String dni) throws UserNotFoundException {
         UserDto user = getUser(dni);
@@ -42,11 +56,19 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
+    /**
+     * @return all users
+     */
     @Override
     public List<UserDto> getAll() {
         return loadDatabase();
     }
 
+    /**
+     * Validates if the user already exists
+     * @param dni
+     * @return
+     */
     @Override
     public boolean exists(String dni) {
         UserDto user = getUser(dni);
@@ -81,8 +103,13 @@ public class UserRepositoryImpl implements UserRepository {
         return users;
     }
 
+    /**
+     * Aux method to convert a csv line to an object
+     * @param data
+     * @return
+     */
     private UserDto objectMapper(String[] data) {
-        String dni, name, province, id;
+        String dni, name, province;
 
         dni = data[0];
         name = data[1];
@@ -91,8 +118,13 @@ public class UserRepositoryImpl implements UserRepository {
         return new UserDto(dni, name, province);
     }
 
+    /**
+     * Aux method to convert an object in a csv line.
+     * @param user
+     * @return
+     */
     private String[] parseUserData(UserDto user) {
-        String id, dni, name, province;
+        String dni, name, province;
 
         dni = user.getDni();
         name = user.getName();
