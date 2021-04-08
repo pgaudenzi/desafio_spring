@@ -30,6 +30,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         ProductDto result = null;
         for (ProductDto product : products) {
             if (product.getId() == id) result = product;
+            break;
         }
         if (result == null) throw new ProductNotFoundException(id);
         return result;
@@ -56,10 +57,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
             csvReader.close();
 
-        } catch (FileNotFoundException fnfe) {
+        } catch (IOException fnfe) {
             fnfe.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return products;

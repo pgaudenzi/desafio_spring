@@ -20,30 +20,36 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
     ProductRepository repository;
 
     @Override
-    public PurchaseReqResponseDto process(PurchaseRequestDto request) {
+    public PurchaseReqResponseDto process(PurchaseRequestDto request)
+            throws ProductNotFoundException, NoAvailableStockException {
+
         StatusCodeDto status;
-        TicketDto ticket = null;
+        TicketDto ticket = calculateTicket(request);
+        status = new StatusCodeDto(HttpStatus.OK, "La solicitud de compra se " +
+                "completo con exito");
+        return new PurchaseReqResponseDto(ticket, status);
+    }
 
-        try {
-            ticket = calculateTicket(request);
-            status = new StatusCodeDto(HttpStatus.OK, "La solicitud de compra se " +
-                    "completo con exito");
-            return new PurchaseReqResponseDto(ticket, status);
+    @Override
+    public ShoppingCartDto processShoppingCart(PurchaseRequestDto request)
+            throws ProductNotFoundException, NoAvailableStockException {
 
-        } catch (ProductNotFoundException pnfe) {
-            status = new StatusCodeDto(HttpStatus.NOT_FOUND, pnfe.getMessage());
-            return new PurchaseReqResponseDto(ticket, status);
+        final PurchaseReqResponseDto purchase = process(request);
+        final double purchaseTotal = purchase.getTicket().getTotal();
+        final ShoppingCartDto shoppingCart = ShoppingCartDto.getInstance();
+        final List<PurchaseReqResponseDto> purchases = shoppingCart.getPurchases();
 
-        } catch (NoAvailableStockException nase) {
-            status = new StatusCodeDto(HttpStatus.INTERNAL_SERVER_ERROR, nase.getMessage());
-            return new PurchaseReqResponseDto(ticket, status);
-        }
+        purchases.add(purchase);
+        shoppingCart.setTotal(shoppingCart.getTotal() + purchaseTotal);
+        shoppingCart.setPurchases(purchases);
+
+        return shoppingCart;
     }
 
     private TicketDto calculateTicket(PurchaseRequestDto request)
             throws NoAvailableStockException, ProductNotFoundException {
 
-        List<ItemTicketDto> articles = request.getArticles();
+        final List<ItemTicketDto> articles = request.getArticles();
         TicketDto ticket;
         double total = 0.0;
         for (ItemTicketDto article : articles) {
