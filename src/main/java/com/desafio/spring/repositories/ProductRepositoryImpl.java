@@ -29,8 +29,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         List<ProductDto> products = this.products;
         ProductDto result = null;
         for (ProductDto product : products) {
-            if (product.getId() == id) result = product;
-            break;
+            if (product.getId() == id) {
+                result = product;
+                break;
+            }
         }
         if (result == null) throw new ProductNotFoundException(id);
         return result;
@@ -38,10 +40,11 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     private List<ProductDto> loadDataBase() {
         FileReader fileReader = null;
+        String absPath = new File("").getAbsolutePath();
         List<ProductDto> products = new ArrayList<>();
 
         try {
-            fileReader = new FileReader("src/main/resources/dbProductos.csv");
+            fileReader = new FileReader(absPath + "/src/main/resources/dbProductos.csv");
 
             BufferedReader csvReader = new BufferedReader(fileReader);
 

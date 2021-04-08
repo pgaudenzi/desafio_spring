@@ -7,6 +7,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,11 +17,15 @@ import java.util.List;
 @Service
 public class UserRepositoryImpl implements UserRepository {
 
+    private final String usersDbPath = "/src/main/resources/dbUsers.csv";
+    private final String absPath = new File("").getAbsolutePath();
+
     @Override
     public void addNewUser(UserDto user) throws IOException, ExistingUserException {
         if (!exists(user.getDni())) {
             String[] userData = parseUserData(user);
-            FileWriter file = new FileWriter("src/main/resources/dbUsers.csv", true);
+            //FileWriter file = new FileWriter("src/main/resources/dbUsers.csv", true);
+            FileWriter file = new FileWriter(absPath + usersDbPath, true);
             CSVWriter writer = new CSVWriter(file);
             writer.writeNext(userData);
             writer.close();
@@ -63,7 +68,7 @@ public class UserRepositoryImpl implements UserRepository {
     private List<UserDto> loadDatabase() {
         List<UserDto> users = new ArrayList<>();
         try {
-            FileReader file = new FileReader("src/main/resources/dbUsers.csv");
+            FileReader file = new FileReader(absPath + usersDbPath);
             CSVReader reader = new CSVReader(file);
             String[] row;
             while ((row = reader.readNext()) != null) {
