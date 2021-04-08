@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserDto user) throws IOException, ExistingUserException {
-        if (user.getDni() == null || user.getName() == null || user.getProvince() == null) {
+        if (user.getDni() == null || user.getDni().equals("")
+                || user.getName() == null || user.getName().equals("")
+                || user.getProvince() == null || user.getProvince().equals("")) {
             throw new IllegalArgumentException("No se puede dar de alta un nuevo cliente si no " +
                     "se tienen todos los datos del mismo");
         }

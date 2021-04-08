@@ -26,7 +26,30 @@ Devuelve un listado de los porductos filtrados por categoria
     
 ## Solicitud de compra
 ### POST: /api/v1/purchase-request
-Envia una solicitud de compra.
+* Envia una solicitud de compra.
+* Para enviar una solicitud de compra se debe enviar un objeto con una lista de "articles", cada articulo debe contener un producto con:
+    * productId
+    * name
+    * brand
+    * quantity
+* Ejemplo: {
+    "articles":
+            [
+                {
+                    "productId":1,
+                    "name":"Desmalezadora",
+                    "brand":"Makita",
+                    "quantity":1
+                },
+                {
+                    "productId":4,
+                    "name":"Zapatillas Deportivas",
+                    "brand":"Nike",
+                    "quantity":1
+                }
+            ]
+}
+
 
 ### POST: /api/v1/shopping-cart
 * Por cada solicitud de compra enviada, se devuelve el total de todas las solicitudes de compra.

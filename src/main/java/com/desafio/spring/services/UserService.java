@@ -2,7 +2,6 @@ package com.desafio.spring.services;
 
 import com.desafio.spring.dtos.UserDto;
 import com.desafio.spring.exceptions.ExistingUserException;
-import org.apache.catalina.User;
 
 import java.io.IOException;
 import java.util.List;
