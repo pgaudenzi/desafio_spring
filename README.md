@@ -52,6 +52,7 @@ Devuelve un listado de los porductos filtrados por categoria
 
 
 ### POST: /api/v1/shopping-cart
+* Envia una solicitud de compra (como la del ejemplo de purchase-request).
 * Por cada solicitud de compra enviada, se devuelve el total de todas las solicitudes de compra.
 * Es independiente de los clientes.
 
