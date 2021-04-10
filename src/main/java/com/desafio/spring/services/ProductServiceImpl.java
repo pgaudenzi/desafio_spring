@@ -16,6 +16,8 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private static final String ORDER = "order";
+
     @Autowired
     ProductRepository repository;
 
@@ -41,10 +43,10 @@ public class ProductServiceImpl implements ProductService {
         int sortCriteria = 0;
 
         // Remove the order value to manage the filters logic first
-        if (params.containsKey("order")) {
+        if (params.containsKey(ORDER)) {
             sort = true;
-            sortCriteria = Integer.parseInt(params.get("order"));
-            params.remove("order");
+            sortCriteria = Integer.parseInt(params.get(ORDER));
+            params.remove(ORDER);
         }
 
         List<ProductDto> products = repository.getAll();

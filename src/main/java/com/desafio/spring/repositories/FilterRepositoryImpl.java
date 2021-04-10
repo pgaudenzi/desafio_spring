@@ -52,7 +52,7 @@ public class FilterRepositoryImpl implements FilterRepository {
     @Override
     public List<ProductDto> filterByCategory(String category, List<ProductDto> products) {
         return products.stream()
-                .filter((product) -> (product.getCategory()).equalsIgnoreCase(category))
+                .filter(product -> (product.getCategory()).equalsIgnoreCase(category))
                 .collect(Collectors.toList());
     }
 
@@ -77,9 +77,9 @@ public class FilterRepositoryImpl implements FilterRepository {
                 return Integer.toString(product.getPrice());
             case "prestige":
                 return product.getPrestige();
+            default:
+                return "";
         }
-
-        return "";
     }
 
 }

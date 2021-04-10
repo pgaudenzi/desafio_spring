@@ -20,8 +20,8 @@ import java.util.List;
 @Service
 public class UserRepositoryImpl implements UserRepository {
 
-    private final String usersDbPath = "/src/main/resources/dbUsers.csv";
-    private final String absPath = new File("").getAbsolutePath();
+    private static final String USERS_DB_PATH = "/src/main/resources/dbUsers.csv";
+    private static final String ABS_PATH = new File("").getAbsolutePath();
 
     /**
      * Write a new user in the csv file
@@ -33,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void addNewUser(UserDto user) throws IOException, ExistingUserException {
         if (!exists(user.getDni())) {
             String[] userData = parseUserData(user);
-            FileWriter file = new FileWriter(absPath + usersDbPath, true);
+            FileWriter file = new FileWriter(ABS_PATH + USERS_DB_PATH, true);
             CSVWriter writer = new CSVWriter(file);
             writer.writeNext(userData);
             writer.close();
@@ -89,14 +89,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     private List<UserDto> loadDatabase() {
         List<UserDto> users = new ArrayList<>();
-        try {
-            FileReader file = new FileReader(absPath + usersDbPath);
-            CSVReader reader = new CSVReader(file);
+        try (CSVReader reader = new CSVReader(new FileReader(ABS_PATH + USERS_DB_PATH))) {
             String[] row;
             while ((row = reader.readNext()) != null) {
                 users.add(objectMapper(row));
             }
-            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,11 +106,9 @@ public class UserRepositoryImpl implements UserRepository {
      * @return
      */
     private UserDto objectMapper(String[] data) {
-        String dni, name, province;
-
-        dni = data[0];
-        name = data[1];
-        province = data[2];
+        String dni = data[0];
+        String name = data[1];
+        String province = data[2];
 
         return new UserDto(dni, name, province);
     }
@@ -124,11 +119,9 @@ public class UserRepositoryImpl implements UserRepository {
      * @return
      */
     private String[] parseUserData(UserDto user) {
-        String dni, name, province;
-
-        dni = user.getDni();
-        name = user.getName();
-        province = user.getProvince();
+        String dni = user.getDni();
+        String name = user.getName();
+        String province = user.getProvince();
 
         return new String[] {dni, name, province};
     }

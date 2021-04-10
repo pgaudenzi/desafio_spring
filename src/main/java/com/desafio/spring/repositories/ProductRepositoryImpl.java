@@ -40,7 +40,6 @@ public class ProductRepositoryImpl implements ProductRepository {
      */
     @Override
     public ProductDto findProductById(int id) throws ProductNotFoundException {
-        List<ProductDto> products = this.products;
         ProductDto result = null;
         for (ProductDto product : products) {
             if (product.getId() == id) {
@@ -57,14 +56,11 @@ public class ProductRepositoryImpl implements ProductRepository {
      * @return
      */
     private List<ProductDto> loadDataBase() {
-        FileReader fileReader = null;
         String absPath = new File("").getAbsolutePath();
-        List<ProductDto> products = new ArrayList<>();
+        List<ProductDto> allProducts = new ArrayList<>();
 
-        try {
-            fileReader = new FileReader(absPath + "/src/main/resources/dbProductos.csv");
-
-            BufferedReader csvReader = new BufferedReader(fileReader);
+        try (BufferedReader csvReader = new BufferedReader(
+                new FileReader(absPath + "/src/main/resources/dbProductos.csv"))) {
 
             String row;
             boolean firstTime = true;
@@ -73,16 +69,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                     firstTime = false;
                 } else {
                     String[] data = row.split(",");
-                    products.add(objectMapper(data));
+                    allProducts.add(objectMapper(data));
                 }
             }
-            csvReader.close();
-
         } catch (IOException fnfe) {
             fnfe.printStackTrace();
         }
 
-        return products;
+        return allProducts;
     }
 
     /**
@@ -92,15 +86,13 @@ public class ProductRepositoryImpl implements ProductRepository {
      */
     private ProductDto objectMapper(String[] data) {
 
-        String name, category, brand, price, quantity, freeShipping, prestige;
-
-        name = data[0];
-        category = data[1];
-        brand = data[2];
-        price = data[3];
-        quantity = data[4];
-        freeShipping = data[5];
-        prestige = data[6];
+        String name = data[0];
+        String category = data[1];
+        String brand = data[2];
+        String price = data[3];
+        String quantity = data[4];
+        String freeShipping = data[5];
+        String prestige = data[6];
 
         return new ProductDto(id.incrementAndGet(), name, category, brand,
                 Integer.parseInt(price.replaceAll("[^0-9]","")),

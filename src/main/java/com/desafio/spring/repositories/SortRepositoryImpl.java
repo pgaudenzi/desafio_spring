@@ -3,7 +3,6 @@ package com.desafio.spring.repositories;
 import com.desafio.spring.dtos.ProductDto;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class SortRepositoryImpl implements SortRepository {
      * @return
      */
     public List<ProductDto> sort(int criteria, List<ProductDto> products) {
-        List<ProductDto> sortedProducts = new ArrayList<>();
+        List<ProductDto> sortedProducts;
 
         switch (criteria) {
             case 0:
@@ -39,6 +38,8 @@ public class SortRepositoryImpl implements SortRepository {
             case 3:
                 sortedProducts = sortByPriceDesc(products);
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid sorting criteria");
         }
 
         return sortedProducts;
