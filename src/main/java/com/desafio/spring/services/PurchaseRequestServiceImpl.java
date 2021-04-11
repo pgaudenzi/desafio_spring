@@ -1,9 +1,12 @@
 package com.desafio.spring.services;
 
 import com.desafio.spring.dtos.*;
+import com.desafio.spring.exceptions.BadUserException;
 import com.desafio.spring.exceptions.NoAvailableStockException;
 import com.desafio.spring.exceptions.ProductNotFoundException;
 import com.desafio.spring.repositories.ProductRepository;
+import com.desafio.spring.repositories.PurchaseRepository;
+import com.desafio.spring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,45 +26,56 @@ public class PurchaseRequestServiceImpl implements PurchaseRequestService {
     @Autowired
     ProductRepository repository;
 
+    @Autowired
+    PurchaseRepository purchaseRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     /**
-     * Process a pruchase request
-     * @param request
+     * Process a purchase request
+     * @param request purchase request
      * @return the response to the purchase request
-     * @throws ProductNotFoundException
-     * @throws NoAvailableStockException
+     * @throws ProductNotFoundException if the product does not exists
+     * @throws NoAvailableStockException if the stock is not enough to process the purchase
      */
     @Override
     public PurchaseReqResponseDto process(PurchaseRequestDto request)
-            throws ProductNotFoundException, NoAvailableStockException {
+            throws ProductNotFoundException, NoAvailableStockException, BadUserException {
 
-        StatusCodeDto status;
-        TicketDto ticket = calculateTicket(request);
-        status = new StatusCodeDto(HttpStatus.OK, "La solicitud de compra se " +
-                "completo con exito");
-        return new PurchaseReqResponseDto(ticket, status);
+        if (userRepository.exists(request.getUsername())) {
+            StatusCodeDto status;
+            TicketDto ticket = calculateTicket(request);
+            status = new StatusCodeDto(HttpStatus.OK, "La solicitud de compra se " +
+                    "completo con exito");
+            PurchaseReqResponseDto processedPurchase = new PurchaseReqResponseDto(ticket, status);
+            purchaseRepository.addPurchase(request.getUsername(), processedPurchase);
+            return processedPurchase;
+        } else {
+            throw new BadUserException();
+        }
     }
 
     /**
-     * Process a shopping cart request
-     * @param request
-     * @return the shopping cart
-     * @throws ProductNotFoundException
-     * @throws NoAvailableStockException
+     * Get the user's purchases
+     * @param username
+     * @return the purchases requested during the user session
+     * @throws BadUserException if the user does not exists
      */
     @Override
-    public ShoppingCartDto processShoppingCart(PurchaseRequestDto request)
-            throws ProductNotFoundException, NoAvailableStockException {
+    public UserShoppingCartDto getUserShoppingCart(String username) throws BadUserException {
+        if (userRepository.exists(username)) {
+            final List<PurchaseReqResponseDto> userPurchases = purchaseRepository.getUserPurchases(username);
+            double total = 0.0;
 
-        final PurchaseReqResponseDto purchase = process(request);
-        final double purchaseTotal = purchase.getTicket().getTotal();
-        final ShoppingCartDto shoppingCart = ShoppingCartDto.getInstance();
-        final List<PurchaseReqResponseDto> purchases = shoppingCart.getPurchases();
+            for (PurchaseReqResponseDto purchase : userPurchases) {
+                total += purchase.getTicket().getTotal();
+            }
 
-        purchases.add(purchase);
-        shoppingCart.setTotal(shoppingCart.getTotal() + purchaseTotal);
-        shoppingCart.setPurchases(purchases);
-
-        return shoppingCart;
+            return new UserShoppingCartDto(total, userPurchases);
+        } else {
+            throw new BadUserException();
+        }
     }
 
     /**

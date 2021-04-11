@@ -1,10 +1,7 @@
 package com.desafio.spring.config;
 
 import com.desafio.spring.dtos.ErrorDto;
-import com.desafio.spring.exceptions.ExistingUserException;
-import com.desafio.spring.exceptions.NoAvailableStockException;
-import com.desafio.spring.exceptions.ProductNotFoundException;
-import com.desafio.spring.exceptions.UserNotFoundException;
+import com.desafio.spring.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -62,6 +59,14 @@ public class ExceptionHandlerController {
         ErrorDto error = new ErrorDto("IOException",
                 e.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, error.getStatus());
+    }
+
+    @ExceptionHandler(BadUserException.class)
+    public ResponseEntity<ErrorDto> handleIOException(BadUserException e) {
+        ErrorDto error = new ErrorDto("BadUserException",
+                "The user does not exists",
+                HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(error, error.getStatus());
     }
 

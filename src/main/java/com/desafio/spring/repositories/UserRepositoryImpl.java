@@ -31,7 +31,7 @@ public class UserRepositoryImpl implements UserRepository {
      */
     @Override
     public void addNewUser(UserDto user) throws IOException, ExistingUserException {
-        if (!exists(user.getDni())) {
+        if (!exists(user.getUsername())) {
             String[] userData = parseUserData(user);
             FileWriter file = new FileWriter(ABS_PATH + USERS_DB_PATH, true);
             CSVWriter writer = new CSVWriter(file);
@@ -44,15 +44,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Find a user by dni
-     * @param dni
+     * Find a user by username
+     * @param username
      * @return the user found
      * @throws UserNotFoundException
      */
     @Override
-    public UserDto findUserByDni(String dni) throws UserNotFoundException {
-        UserDto user = getUser(dni);
-        if (user == null) throw new UserNotFoundException(dni);
+    public UserDto findUserByUsername(String username) throws UserNotFoundException {
+        UserDto user = getUser(username);
+        if (user == null) throw new UserNotFoundException(username);
         return user;
     }
 
@@ -66,20 +66,20 @@ public class UserRepositoryImpl implements UserRepository {
 
     /**
      * Validates if the user already exists
-     * @param dni
+     * @param username
      * @return
      */
     @Override
-    public boolean exists(String dni) {
-        UserDto user = getUser(dni);
+    public boolean exists(String username) {
+        UserDto user = getUser(username);
         return user != null;
     }
 
-    private UserDto getUser(String dni) {
+    private UserDto getUser(String username) {
         List<UserDto> users = loadDatabase();
         UserDto result = null;
         for (UserDto user : users) {
-            if (user.getDni().equalsIgnoreCase(dni)) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
                 result = user;
                 break;
             }
@@ -106,11 +106,12 @@ public class UserRepositoryImpl implements UserRepository {
      * @return
      */
     private UserDto objectMapper(String[] data) {
-        String dni = data[0];
-        String name = data[1];
-        String province = data[2];
+        String username = data[0];
+        String dni = data[1];
+        String name = data[2];
+        String province = data[3];
 
-        return new UserDto(dni, name, province);
+        return new UserDto(username, dni, name, province);
     }
 
     /**
@@ -119,11 +120,12 @@ public class UserRepositoryImpl implements UserRepository {
      * @return
      */
     private String[] parseUserData(UserDto user) {
+        String username = user.getUsername();
         String dni = user.getDni();
         String name = user.getName();
         String province = user.getProvince();
 
-        return new String[] {dni, name, province};
+        return new String[] {username, dni, name, province};
     }
 
 }

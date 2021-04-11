@@ -10,8 +10,8 @@ import java.util.List;
 public interface UserRepository {
 
     void addNewUser(UserDto user) throws IOException, ExistingUserException;
-    UserDto findUserByDni(String dni) throws UserNotFoundException;
+    UserDto findUserByUsername(String username) throws UserNotFoundException;
     List<UserDto> getAll();
-    boolean exists(String dni);
+    boolean exists(String username);
 
 }
