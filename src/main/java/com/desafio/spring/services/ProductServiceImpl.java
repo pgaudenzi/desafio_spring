@@ -1,9 +1,9 @@
 package com.desafio.spring.services;
 
 import com.desafio.spring.dtos.ProductDto;
-import com.desafio.spring.repositories.FilterRepository;
 import com.desafio.spring.repositories.ProductRepository;
-import com.desafio.spring.repositories.SortRepository;
+import com.desafio.spring.utils.FiltersUtil;
+import com.desafio.spring.utils.SortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +20,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository repository;
-
-    @Autowired
-    FilterRepository filterRepository;
-
-    @Autowired
-    SortRepository sortRepository;
 
     /**
      * Method to get the products.
@@ -53,21 +47,21 @@ public class ProductServiceImpl implements ProductService {
 
         if (params.isEmpty()) {
             if (sort) {
-                return sortRepository.sort(sortCriteria, products);
+                return SortUtil.sort(sortCriteria, products);
             }
             return products;
         }
 
-        filterRepository.validate(params);
+        FiltersUtil.validate(params);
 
         if (params.size() == 2) {
-            result = filterRepository.filterProductsWithTwoFilters(products, params);
+            result = FiltersUtil.filterProductsWithTwoFilters(products, params);
         } else {
-            result = filterRepository.filterByCategory(params.get("category"), products);
+            result = FiltersUtil.filterByCategory(params.get("category"), products);
         }
 
         if (sort) {
-            return sortRepository.sort(sortCriteria, result);
+            return SortUtil.sort(sortCriteria, result);
         }
 
         return result;

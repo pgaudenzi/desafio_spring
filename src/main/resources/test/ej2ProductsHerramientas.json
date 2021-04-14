@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Desmalezadora",
+    "category": "Herramientas",
+    "brand": "Makita",
+    "price": 9600,
+    "quantity": 5,
+    "freeShipping": "SI",
+    "prestige": "****"
+  },
+  {
+    "id": 2,
+    "name": "Taladro",
+    "category": "Herramientas",
+    "brand": "Black & Decker",
+    "price": 12500,
+    "quantity": 7,
+    "freeShipping": "SI",
+    "prestige": "****"
+  },
+  {
+    "id": 3,
+    "name": "Soldadora",
+    "category": "Herramientas",
+    "brand": "Black & Decker",
+    "price": 7215,
+    "quantity": 10,
+    "freeShipping": "SI",
+    "prestige": "***"
+  },
+  {
+    "id": 4,
+    "name": "Destornillador",
+    "category": "Herramientas",
+    "brand": "Black & Decker",
+    "price": 215,
+    "quantity": 10,
+    "freeShipping": "NO",
+    "prestige": "****"
+  }
+]

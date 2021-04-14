@@ -1,16 +1,15 @@
-package com.desafio.spring.repositories;
+package com.desafio.spring.utils;
 
 import com.desafio.spring.dtos.ProductDto;
-import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Implementation to manage the product's ordering logic.
- */
-@Repository
-public class SortRepositoryImpl implements SortRepository {
+public class SortUtil {
+
+    private SortUtil () {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Sort products according to the criteria.
@@ -22,7 +21,7 @@ public class SortRepositoryImpl implements SortRepository {
      * @param products
      * @return
      */
-    public List<ProductDto> sort(int criteria, List<ProductDto> products) {
+    public static List<ProductDto> sort(int criteria, List<ProductDto> products) {
         List<ProductDto> sortedProducts;
 
         switch (criteria) {
@@ -45,22 +44,22 @@ public class SortRepositoryImpl implements SortRepository {
         return sortedProducts;
     }
 
-    private List<ProductDto> sortByNameAsc(List<ProductDto> products) {
+    private static List<ProductDto> sortByNameAsc(List<ProductDto> products) {
         products.sort(Comparator.comparing(ProductDto::getName));
         return products;
     }
 
-    private List<ProductDto> sortByNameDesc(List<ProductDto> products) {
+    private static List<ProductDto> sortByNameDesc(List<ProductDto> products) {
         products.sort(Comparator.comparing(ProductDto::getName).reversed());
         return products;
     }
 
-    private List<ProductDto> sortByPriceAsc(List<ProductDto> products) {
+    private static List<ProductDto> sortByPriceAsc(List<ProductDto> products) {
         products.sort(Comparator.comparing(ProductDto::getPrice));
         return products;
     }
 
-    private List<ProductDto> sortByPriceDesc(List<ProductDto> products) {
+    private static List<ProductDto> sortByPriceDesc(List<ProductDto> products) {
         products.sort(Comparator.comparing(ProductDto::getPrice).reversed());
         return products;
     }

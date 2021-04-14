@@ -1,17 +1,16 @@
-package com.desafio.spring.repositories;
+package com.desafio.spring.utils;
 
 import com.desafio.spring.dtos.ProductDto;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Implementation to manage filters validation and logic
- */
-@Repository
-public class FilterRepositoryImpl implements FilterRepository {
+public class FiltersUtil {
+
+    private FiltersUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * Validates if filters comply with business rules.
@@ -20,8 +19,7 @@ public class FilterRepositoryImpl implements FilterRepository {
      * @param filters
      * @throws IllegalArgumentException
      */
-    @Override
-    public void validate(Map<String, String> filters) throws IllegalArgumentException {
+    public static void validate(Map<String, String> filters) throws IllegalArgumentException {
         if (filters.size() > 2)
             throw new IllegalArgumentException("Invalid amount of arguments, only two filters allowed");
         if (filters.size() == 1 && !filters.containsKey("category"))
@@ -34,8 +32,7 @@ public class FilterRepositoryImpl implements FilterRepository {
      * @param filters
      * @return
      */
-    @Override
-    public List<ProductDto> filterProductsWithTwoFilters(List<ProductDto> products, Map<String, String> filters) {
+    public static List<ProductDto> filterProductsWithTwoFilters(List<ProductDto> products, Map<String, String> filters) {
         Object[] keys = filters.keySet().toArray();
         return products.stream()
                 .filter(product -> getAttribute(keys[0].toString(), product).equalsIgnoreCase(filters.get(keys[0].toString()))
@@ -49,8 +46,7 @@ public class FilterRepositoryImpl implements FilterRepository {
      * @param products
      * @return
      */
-    @Override
-    public List<ProductDto> filterByCategory(String category, List<ProductDto> products) {
+    public static List<ProductDto> filterByCategory(String category, List<ProductDto> products) {
         return products.stream()
                 .filter(product -> (product.getCategory()).equalsIgnoreCase(category))
                 .collect(Collectors.toList());
@@ -62,7 +58,7 @@ public class FilterRepositoryImpl implements FilterRepository {
      * @param product
      * @return
      */
-    private String getAttribute(String attributeName, ProductDto product) {
+    private static String getAttribute(String attributeName, ProductDto product) {
 
         switch (attributeName) {
             case "category":

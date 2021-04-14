@@ -1,0 +1,18 @@
+{
+  "username": "lucia",
+  "articles":
+  [
+    {
+      "productId":1,
+      "name":"Desmalezadora",
+      "brand":"Makita",
+      "quantity":1
+    },
+    {
+      "productId":4,
+      "name":"Zapatillas Deportivas",
+      "brand":"Nike",
+      "quantity":1
+    }
+  ]
+}
